@@ -998,6 +998,12 @@ func newLauncher(mpiJob *kubeflow.MPIJob, kubectlDeliveryImage string) *batchv1.
 		podSpec.Labels[key] = value
 	}
 
+	// Remove some labels from the template
+	delete(podSpec.Labels, "network-topology-job-name")
+	delete(podSpec.Labels, "network-topology-job-namespace")
+	delete(podSpec.Labels, "pod-group.scheduling.sigs.k8s.io/min-available")
+	delete(podSpec.Labels, "pod-group.scheduling.sigs.k8s.io/name")
+
 	podSpec.Spec.ServiceAccountName = launcherName
 	podSpec.Spec.InitContainers = append(podSpec.Spec.InitContainers, corev1.Container{
 		Name:  kubectlDeliveryName,
